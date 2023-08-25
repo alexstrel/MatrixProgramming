@@ -1,4 +1,5 @@
-// This is an adopted C++2X version of the original CUDA implementation 
+// A.S. : this is an adopted C++2X version of the original CUDA implementation :
+// https://github.com/hummingtree/dmma-ptx-gemm
 /**
  * Copyright (c) 2021, NVIDIA Corporation
  *
