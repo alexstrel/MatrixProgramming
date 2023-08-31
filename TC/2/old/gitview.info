@@ -1,0 +1,7 @@
+
+git log --no-merges --pretty=format:"%h%x09%an%x09%ad%x09%s"
+
+ 2021  git log --no-merges --pretty=format:"%h%x09%an%x09%ad%x09%s"
+ 2022  git log --author=maddyscientist --no-merges --pretty=format:"%h%x09%an%x09%ad%x09%s"
+ 2025  git log --author="Jiqun Tu" --no-merges --pretty=format:"%h%x09%an%x09%ad%x09%s"
+

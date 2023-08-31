@@ -66,8 +66,8 @@ using Extents2D = stdex::extents<indx_type, stdex::dynamic_extent, stdex::dynami
 template <int block_y, int block_z>
 inline void g2s(MDViewTp auto smem_view, MDViewTp auto gmem_view, int row_offset, int col_offset, pipeline &pipe)//bM,bN,bK
 {
-  constexpr auto row_dim = smem_view.extent(0);//bM or bK
-  constexpr auto col_dim = smem_view.extent(1);//bK or bN
+  constexpr auto row_dim = smem_view.extent(0);
+  constexpr auto col_dim = smem_view.extent(1);
 #pragma unroll
   for (int col = threadIdx.z; col < col_dim; col += block_z) {
 #pragma unroll
@@ -100,7 +100,7 @@ void mma_cuda_kernel(const int thread_id, MDViewTp auto view_a, MDViewTp auto vi
   constexpr int total_warp = block_y * block_z / 32;// number of full warps (8*16) / 32
 
   constexpr int total_tile = tile_row_dim * tile_col_dim;// 2 x 2 
-  constexpr int warp_cycle = total_tile / total_warp;    // 4 / 4
+  constexpr int warp_cycle = total_tile / total_warp;    // 4 / 2
 
   static_assert(total_tile % total_warp == 0, "Total number of tiles should be divisible by the number of warps.");
 
@@ -133,12 +133,9 @@ void mma_cuda_kernel(const int thread_id, MDViewTp auto view_a, MDViewTp auto vi
   const auto K = view_a.extent(1);//or  view_b.extent(0)
 
   for (int k_offset = 0; k_offset < K; k_offset += bK) {
-  
-    const int next_k = k_offset + bK;
-    
-    if (next_k < K) {
-      g2s<block_y, block_z>(view_smem_a_memory, view_a, m_offset, next_k, pipe);
-      g2s<block_y, block_z>(view_smem_b_memory, view_b, next_k, n_offset, pipe);
+    if (k_offset + bK < K) {
+      g2s<block_y, block_z>(view_smem_a_memory, view_a, m_offset, k_offset + bK, pipe);
+      g2s<block_y, block_z>(view_smem_b_memory, view_b, k_offset + bK, n_offset, pipe);
     }
     // We use the one set of smem for compute, and let data being loaded into the other set of smem
     // while doing computation.
@@ -156,7 +153,7 @@ void mma_cuda_kernel(const int thread_id, MDViewTp auto view_a, MDViewTp auto vi
       const int tile_m = logical_warp_index / tile_col_dim;
       const int tile_n = logical_warp_index - tile_m * tile_col_dim;
 
-      for (int tile_k = 0; tile_k < tile_acc_dim; tile_k++) {//(bK / MMA_K)
+      for (int tile_k = 0; tile_k < tile_acc_dim; tile_k++) {
 
         MmaOperandA op_a;
         op_a.load(view_smem_a_compute, tile_k, tile_m, wrm);
@@ -169,7 +166,7 @@ void mma_cuda_kernel(const int thread_id, MDViewTp auto view_a, MDViewTp auto vi
       } // tile_k
     }   // c
 
-    if (next_k < K) {
+    if (k_offset + bK < K) {
       // If we have the next iteration to do, switch the smem buffers:
       // compute -> memory, memory -> compute
       __syncthreads();

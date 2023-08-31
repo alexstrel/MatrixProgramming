@@ -1,0 +1,1000 @@
+ 1078  vim utils/set_params.cpp 
+ 1079  vim tests/invert_test.cpp 
+ 1080  vim lib/inv_eigcg_quda.cpp 
+ 1081  vim include/quda.h 
+ 1082  vim lib/check_params.h 
+ 1083  vim lib/inv_eigcg_quda.cpp 
+ 1084  vim tests/invert_test.cpp 
+ 1085  cd ../
+ 1086  ll
+ 1087  cd workspace/DFL/
+ 1088  ll
+ 1089  cd quda-defl-carevisit-v31-upd/
+ 1090  ll
+ 1091  cd tests/
+ 1092  ll
+ 1093  vim invert_test.cpp 
+ 1094  cd ../
+ 1095  vim lib/inv_eigcg_quda.cpp 
+ 1096  cd ../build-defl-carevisit-v31-upd/
+ 1097  ll
+ 1098  make
+ 1099  ll
+ 1100  cd runs/
+ 1101  ll
+ 1102  ./current_run.sh 
+ 1103  vim current_run.sh 
+ 1104  ./current_run.sh 
+ 1105  vim current_run.sh 
+ 1106  ./current_run.sh 
+ 1107  cd ../
+ 1108  make -j4
+ 1109  make
+ 1110  cd runs/
+ 1111  ./current_run.sh 
+ 1112  vim ./current_run.sh 
+ 1113  ./current_run.sh 
+ 1114  cd ../
+ 1115  make -j4
+ 1116  cd runs/
+ 1117  ./current_run.sh 
+ 1118  cmake --build .. --target invert_test
+ 1119  ./current_run.sh 
+ 1120  cmake --build .. --target invert_test
+ 1121  ./current_run.sh 
+ 1122  cmake --build .. --target invert_test
+ 1123  ./current_run.sh 
+ 1124  cmake --build .. --target invert_test
+ 1125  ./current_run.sh 
+ 1126  cd ../
+ 1127  ll
+ 1128  rm -rf Multigrid.tgz 
+ 1129  ll
+ 1130  wc
+ 1131  cd ../../quda-defl-carevisit-v31-upd/
+ 1132  ll
+ 1133  vim tests/invert_test.cpp 
+ 1134  vim include/quda.h 
+ 1135  vim tests/invert_test.cpp 
+ 1136  vim include/quda.h 
+ 1137  vim lib/inv_eigcg_quda.cpp 
+ 1138  vim tests/invert_test.cpp 
+ 1139  vim lib/inv_eigcg_quda.cpp 
+ 1140  vim lib/interface_quda.cpp 
+ 1141  vim lib/inv_eigcg_quda.cpp 
+ 1142  vim tests/invert_test.cpp
+ 1143  vim utils/set_params.cpp 
+ 1144  grep -Rn "reliable_delta" ./
+ 1145  kin
+ 1146  vim ~/.bashrc
+ 1147  source ~/.bashrc
+ 1148  vim ~/.bashrc
+ 1149  source ~/.bashrc
+ 1150  wc
+ 1151  cd build-dpcpp-target/
+ 1152  ll
+ 1153  cd work/
+ 1154  ll
+ 1155  mkdir redister-traits
+ 1156  cd redister-traits/
+ 1157  cp ../../include/register_traits.h .
+ 1158  mv register_traits.h register_traits.cu
+ 1159  vim register_traits.cu 
+ 1160  cp ../malloc/__Xconverter_malloc.sh .
+ 1161  vim __Xconverter_malloc.sh 
+ 1162  sh __Xconverter_malloc.sh 
+ 1163  source ../set_env.sh 
+ 1164  sh __Xconverter_malloc.sh 
+ 1165  cd ../../
+ 1166  cd ../
+ 1167  ll
+ 1168  ls lib/
+ 1169  cd
+ 1170  cd ssd-disk
+ 1171  ll
+ 1172  cd workspace/
+ 1173  ll
+ 1174  cd OneAPI/
+ 1175  ll
+ 1176  cd quda-target-dpcpp-v8/
+ 1177  ll
+ 1178  cd build-dpcpp-target/
+ 1179  ll
+ 1180  source set_env.sh 
+ 1181  ll
+ 1182  cd work/
+ 1183  ll
+ 1184  mkdir copycsf
+ 1185  cd copycsf/
+ 1186  ll
+ 1187  cp ../cudacsf/__Xconverter_cudacsf.sh .
+ 1188  ll
+ 1189  mv __Xconverter_cudacsf.sh __Xconverter_copycsf.sh 
+ 1190  ll
+ 1191  less __Xconverter_copycsf.sh 
+ 1192  mkdir factory
+ 1193  cd factory/
+ 1194  ll
+ 1195  cp ../../../../lib/copy_color_spinor.* .
+ 1196  ll
+ 1197  vim copy_color_spinor.cu
+ 1198  vim copy_color_spinor.cuh 
+ 1199  vim copy_color_spinor.cu
+ 1200  ll
+ 1201  cp ../__Xconverter_copycsf.sh .
+ 1202  vim __Xconverter_copycsf.sh 
+ 1203  sh __Xconverter_copycsf.sh 
+ 1204  ll
+ 1205  cp ../../../../lib/copy_color_spinor_ss.cu .
+ 1206  ll
+ 1207  cp __Xconverter_copycsf.sh __Xconverter_copycsf_ss.sh
+ 1208  vim __Xconverter_copycsf_ss.sh 
+ 1209  sh __Xconverter_copycsf_ss.sh 
+ 1210  ll
+ 1211  vim copy_color_spinor_ss.cu
+ 1212  vim copy_color_spinor.cuh 
+ 1213  sh __Xconverter_copycsf_ss.sh 
+ 1214  ll
+ 1215  cd dpcpp_out
+ 1216  ll
+ 1217  less copy_color_spinor.dp.hpp 
+ 1218  cd ../
+ 1219  ll
+ 1220  vim __Xconverter_copycsf_ss.sh 
+ 1221  sh __Xconverter_copycsf_ss.sh 
+ 1222  ll
+ 1223  cd dpcpp_out
+ 1224  ll
+ 1225  cd ../
+ 1226  ll
+ 1227  cd ../
+ 1228  ll
+ 1229  mkdir csforder
+ 1230  cd csforder/
+ 1231  ll
+ 1232  cp ../cudacsf/__Xconverter_cudacsf.sh .
+ 1233  ll
+ 1234  vim __Xconverter_cudacsf.sh 
+ 1235  cp ../include/color_spinor_field_order.h .
+ 1236  ll
+ 1237  mv color_spinor_field_order.h color_spinor_field_order.cpp 
+ 1238  ll
+ 1239  vim color_spinor_field_order.cpp 
+ 1240  ll
+ 1241  vim color_spinor_field_order.cpp 
+ 1242  sh __Xconverter_cudacsf.sh 
+ 1243  ll
+ 1244  cd dpcpp_out
+ 1245  ll
+ 1246  less color_spinor_field_order.cpp.dp.cpp 
+ 1247  cd
+ 1248  cd ssd-disk
+ 1249  ll
+ 1250  xs workspace/
+ 1251  cd workspace/
+ 1252  ll
+ 1253  cd DFL/
+ 1254  ll
+ 1255  cd build-defl-carevisit-v31-upd
+ 1256  ll
+ 1257  cd runs/
+ 1258  ll
+ 1259  ./current_run.sh 
+ 1260  cmake --build .. --target invert_test
+ 1261  cmake --build .. -j 4 --target invert_test
+ 1262  ./current_run.sh 
+ 1263  cd ..
+ 1264  ./current_run.sh 
+ 1265  vim ./current_run.sh 
+ 1266  cmake --build .. -j 4 --target invert_test
+ 1267  vim ./current_run.sh 
+ 1268  ./current_run.sh 
+ 1269  vim ./current_run.sh 
+ 1270  ./current_run.sh 
+ 1271  vim ./current_run.sh 
+ 1272  ./current_run.sh 
+ 1273  vim ./current_run.sh 
+ 1274  ./current_run.sh 
+ 1275  cmake --build .. -j 4 --target invert_test
+ 1276  ./current_run.sh 
+ 1277  vim current_run.sh 
+ 1278  ./current_run.sh 
+ 1279  vim ./current_run.sh 
+ 1280  sh ./current_run.sh 
+ 1281  vim ./current_run.sh 
+ 1282  sh ./current_run.sh 
+ 1283  vim ./current_run.sh 
+ 1284  sh ./current_run.sh 
+ 1285  vim ./current_run.sh 
+ 1286  sh ./current_run.sh 
+ 1287  vim ./current_run.sh 
+ 1288  sh ./current_run.sh 
+ 1289  vim ./current_run.sh 
+ 1290  sh ./current_run.sh 
+ 1291  vim ./current_run.sh 
+ 1292  sh ./current_run.sh 
+ 1293  kin
+ 1294  lq1
+ 1295  ll
+ 1296  lq1
+ 1297  tev
+ 1298  cd
+ 1299  cd ssd-disk
+ 1300  ll
+ 1301  cd workspace/
+ 1302  cd ../lab/
+ 1303  ll
+ 1304  cd PPS/
+ 1305  ll
+ 1306  cd wire-cell-singularity/
+ 1307  ll
+ 1308  cd ../
+ 1309  ll
+ 1310  cd wct-attempt/
+ 1311  ll
+ 1312  du -ch
+ 1313  ll
+ 1314  vim build_wct.sh
+ 1315  ll /opt/eigen-3.3.7/include/eigen3
+ 1316  sh build_wct.sh
+ 1317  vim /media/alex/964ab999-4315-422b-b92b-f0e750070f4c/lab/PPS/wct-attempt/.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/wcb.py
+ 1318  sh build_wct.sh
+ 1319  vim /media/alex/964ab999-4315-422b-b92b-f0e750070f4c/lab/PPS/wct-attempt/.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/wcb.py
+ 1320  sh build_wct.sh
+ 1321  cd ../
+ 1322  ll
+ 1323  mv wire-cell-toolkit wct-attempt-2
+ 1324  cd wct-attempt-2/
+ 1325  git log
+ 1326  cd ../wct-attempt
+ 1327  git log
+ 1328  git branch
+ 1329  cd ../wct-attempt-2/
+ 1330  git log
+ 1331  ll
+ 1332  cp ../wct-attempt/build_wct.sh .
+ 1333  ll
+ 1334  sh build_wct.sh 
+ 1335  vim build_wct.sh 
+ 1336  ls /opt/jsonnet-0.16.0
+ 1337  set_env.sh
+ 1338  vim set_env.sh
+ 1339  sh set_env.sh
+ 1340  source set_env.sh
+ 1341  sh build_wct.sh 
+ 1342  echo $LD_LIBRARY_PATH 
+ 1343  vim /opt/jsonnet-0.16.0/lib
+ 1344  vim /media/alex/964ab999-4315-422b-b92b-f0e750070f4c/lab/PPS/wct-attempt-2/build/config.log
+ 1345  cd ../
+ 1346  cd wire-cell-singularity/
+ 1347  ll
+ 1348  vim Singularity.wct0.8.0-ub1804
+ 1349  sudo su
+ 1350  cd ../wct-attempt-2/
+ 1351  ll
+ 1352  sh build_wct.sh 
+ 1353  ll
+ 1354  grep -Rn "package" ./
+ 1355  grep -Rn "package_descriptions" ./
+ 1356  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/wcb.py
+ 1357  ll ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/wcb.py
+ 1358  ll ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/
+ 1359  ll ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/generic.py 
+ 1360  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/generic.py 
+ 1361  ll ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/wcb.py
+ 1362  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/wcb.py
+ 1363  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/generic.py 
+ 1364  ll
+ 1365  vim build_wct.sh 
+ 1366  sh build_wct.sh 
+ 1367  vim build_wct.sh 
+ 1368  cp build_wct.sh build_wct.sh.1
+ 1369  vim build_wct.sh
+ 1370  sh build_wct.sh 
+ 1371  vim  /media/alex/964ab999-4315-422b-b92b-f0e750070f4c/lab/PPS/wct-attempt-2/build/config.log
+ 1372  echo $PKG_CONFIG_PATH
+ 1373  vim  /media/alex/964ab999-4315-422b-b92b-f0e750070f4c/lab/PPS/wct-attempt-2/build/config.log
+ 1374  export PKG_CONFIG_PATH=/opt/jsonnet-0.16.0/lib/pkgconfig
+ 1375  sh build_wct.sh 
+ 1376  vim build_wct.sh
+ 1377  sh build_wct.sh 
+ 1378  vim  /media/alex/964ab999-4315-422b-b92b-f0e750070f4c/lab/PPS/wct-attempt-2/build/config.log
+ 1379  grep -Rn "Location for Jsonnet libs" ./
+ 1380  grep -Rn "Jsonnet" ./
+ 1381  cd ../wire-cell-singularity/
+ 1382  ll
+ 1383  less  Singularity.wct0.8.0-ub1804
+ 1384  cd ../
+ 1385  ll
+ 1386  cd external/
+ 1387  ll
+ 1388  cd builds/
+ 1389  ll
+ 1390  cd jsonnet-0.16.0/
+ 1391  ll
+ 1392  python3
+ 1393  which python3
+ 1394  vim ../../../wire-cell-singularity/Singularity.wct0.8.0-ub1804 
+ 1395  python3 setup.py install
+ 1396  cd ../
+ 1397  ll
+ 1398  vim hist.jsonnet 
+ 1399  cd ../../
+ 1400  ll
+ 1401  cd wct-attempt-2/
+ 1402  ll
+ 1403  sh build_wct.sh 
+ 1404  cd ../
+ 1405  cp -r wct-attempt-2 wct-attempt-0.8.0
+ 1406  cd wct-attempt-0.8.0/
+ 1407  ll
+ 1408  git tag
+ 1409  cd ../
+ 1410  ll
+ 1411  mv wct-attempt-0.8.0 wct-attempt-0.14.0
+ 1412  ll
+ 1413  cd wct-attempt-0.14.0/
+ 1414  ll
+ 1415  git checkout 0.14.0
+ 1416  git add --all
+ 1417  git commit
+ 1418  ll
+ 1419  git log
+ 1420  cp build_wct.sh ../
+ 1421  git checkout 0.14.0
+ 1422  git log
+ 1423  ll
+ 1424  mv ../build_wct.sh .
+ 1425  ll
+ 1426  vim build_wct.sh 
+ 1427  sh build_wct.sh 
+ 1428  vim /media/alex/964ab999-4315-422b-b92b-f0e750070f4c/lab/PPS/wct-attempt-0.14.0/build/config.log
+ 1429  grep -Rn "CXX" ./
+ 1430  vim /media/alex/964ab999-4315-422b-b92b-f0e750070f4c/lab/PPS/wct-attempt-0.14.0/build/config.log
+ 1431  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1432  blame ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1433  git blame ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1434  ll
+ 1435  sh build_wct.sh 
+ 1436  vim /media/alex/964ab999-4315-422b-b92b-f0e750070f4c/lab/PPS/wct-attempt-0.14.0/build/config.log
+ 1437  vim pzdz.1
+ 1438  cp pzdz.1 /media/alex/2744-4649/
+ 1439  vim pzdz.1 
+ 1440  grep -Rn "LDFLAGS" ./
+ 1441  cd
+ 1442  cd ssd-disk
+ 1443  ll
+ 1444  cd workspace/
+ 1445  ll
+ 1446  cd ../lab/
+ 1447  ll
+ 1448  cd PPS/
+ 1449  ll
+ 1450  cd wct-attempt-0.14.0/
+ 1451  ll
+ 1452  diff wcb ../wct-attempt-2/wcb 
+ 1453  ll
+ 1454  sh build_wct.sh 
+ 1455  ls
+ 1456  vim build_wct.sh 
+ 1457  cd ../
+ 1458  ll
+ 1459  cd external/
+ 1460  ll
+ 1461  cd builds/
+ 1462  ll
+ 1463  less hist.jsonnet 
+ 1464  exit
+ 1465  python3
+ 1466  ll
+ 1467  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/wcb.py
+ 1468  cp ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/wcb.py backup/
+ 1469  history > backup/h.2
+ 1470  ll
+ 1471  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/wcb.py
+ 1472  grep -Rn "configure" ./
+ 1473  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/wcb.py
+ 1474  grep -Rn "configure" ./
+ 1475  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/wcb.py
+ 1476  cd ssd-disk
+ 1477  ll
+ 1478  cd workspace/
+ 1479  ll
+ 1480  cd DFL/
+ 1481  ll
+ 1482  cd build-defl-carevisit-v29-upd2/
+ 1483  ll
+ 1484  cd tests/
+ 1485  ll
+ 1486  cd ../
+ 1487  ll
+ 1488  cd runs/
+ 1489  ll
+ 1490  less seethischeck.1 
+ 1491  cd ../
+ 1492  ll
+ 1493  cd CHECK/
+ 1494  ll
+ 1495  cd quda-cadefl-v30/
+ 1496  ll
+ 1497  cd build/
+ 1498  ll
+ 1499  cd runs/
+ 1500  ll
+ 1501  vim run_eigcg_l48t12_n1_noprof.sh 
+ 1502  sh run_eigcg_l48t12_n1_noprof.sh 
+ 1503  ll
+ 1504  cp run_eigcg_l48t12_n1_noprof.sh run_eigcg_l24t64_n1_noprof.sh
+ 1505  vim run_eigcg_l24t64_n1_noprof.sh 
+ 1506  ll ~/ssd-disk/configs/
+ 1507  ll ~/ssd-disk/configs/Wl24t64/
+ 1508  ll ~/ssd-disk/configs/Wl24t64/wl_24_64_5p5_x2p38_um0p4125_cfg_1000.lime 
+ 1509  vim run_eigcg_l24t64_n1_noprof.sh 
+ 1510  sh run_eigcg_l24t64_n1_noprof.sh 
+ 1511  vim run_eigcg_l24t64_n1_noprof.sh 
+ 1512  sh run_eigcg_l24t64_n1_noprof.sh 
+ 1513  cd
+ 1514  cd ssd-disk
+ 1515  ll
+ 1516  cd lab/
+ 1517  ll
+ 1518  cd PP
+ 1519  cd PPS/
+ 1520  ll
+ 1521  cd pixeltrack-standalone/
+ 1522  ll
+ 1523  cd src/
+ 1524  ll
+ 1525  cd kokkos
+ 1526  ll
+ 1527  cd ../
+ 1528  ll
+ 1529  cd devel/
+ 1530  ll
+ 1531  gedit PixelRecHits.cc 
+ 1532  cd
+ 1533  cd ssd-disk/lab/PPS/
+ 1534  ll
+ 1535  cd wct-attempt
+ 1536  cd ../wct-attempt-0.14.0/
+ 1537  ll
+ 1538  sh build_wct.sh 
+ 1539  history
+ 1540  ll
+ 1541  ll backup/
+ 1542  ll backup/h.2 
+ 1543  less backup/h.2 
+ 1544  ls
+ 1545  vim build_wct.sh 
+ 1546  vim README.org 
+ 1547  ./wcb -p --notests
+ 1548  ls .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/generic.py 
+ 1549  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/generic.py 
+ 1550  mkdir backup-v2
+ 1551  ll
+ 1552  cp .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/generic.py  backup-v2/
+ 1553  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/generic.py
+ 1554  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py backup-v2/
+ 1555  cp .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py backup-v2/
+ 1556  ll
+ 1557  ll backup-v2/
+ 1558  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1559  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Configure.py 
+ 1560  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1561  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Configure.py 
+ 1562  cp .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Configure.py  backup-v2/
+ 1563  grep -Rn "run_build" ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/
+ 1564  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1565  sh build_wct.sh 
+ 1566  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/generic.py
+ 1567  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1568  sh build_wct.sh 
+ 1569  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/generic.py
+ 1570  sh build_wct.sh 
+ 1571  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1572  sh build_wct.sh 
+ 1573  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1574  sh build_wct.sh 
+ 1575  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1576  sh build_wct.sh 
+ 1577  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1578  sh build_wct.sh 
+ 1579  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1580  sh build_wct.sh 
+ 1581  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1582  sh build_wct.sh 
+ 1583  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1584  sh build_wct.sh 
+ 1585  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1586  sh build_wct.sh 
+ 1587  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1588  sh build_wct.sh 
+ 1589  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1590  cp backup/c_config.py ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1591  sh build_wct.sh 
+ 1592  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1593  sh build_wct.sh 
+ 1594  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1595  sh build_wct.sh 
+ 1596  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1597  sh build_wct.sh 
+ 1598  ./wcb -p --notests
+ 1599  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1600  sh build_wct.sh 
+ 1601  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1602  sh build_wct.sh 
+ 1603  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1604  sh build_wct.sh 
+ 1605  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1606  sh build_wct.sh 
+ 1607  sh build_wct.sh 
+ 1608   ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/c_config.py
+ 1609  sh build_wct.sh 
+ 1610  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/generic.py
+ 1611  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Configure.py 
+ 1612  vim backup/h.1 
+ 1613  vim backup/h.2 
+ 1614  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/extras/generic.py
+ 1615  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Configure.py 
+ 1616  grep -Rn "cxx" ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/
+ 1617  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/gxx.py
+ 1618  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Tools/cxx.py 
+ 1619  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Configure.py 
+ 1620  sh build_wct.sh 
+ 1621  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Configure.py 
+ 1622  grep -Rn "compile" ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/
+ 1623  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Build.py
+ 1624  sh build_wct.sh 
+ 1625  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Build.py
+ 1626  sh build_wct.sh 
+ 1627  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Build.py
+ 1628  sh build_wct.sh 
+ 1629  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Build.py
+ 1630  vim .waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Configure.py 
+ 1631  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Build.py
+ 1632  sh build_wct.sh 
+ 1633  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Build.py
+ 1634  grep -Rn "BuildError" ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/
+ 1635  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Errors.py
+ 1636  vim ./.waf3-2.0.20-166de7957f7e2139ba3f9a9727f846c8/waflib/Build.py
+ 1637  sh build_wct.sh 
+ 1638  nvcc --version
+ 1639  sh build_wct.sh 
+ 1640  nvidia-smi -l 4
+ 1641  cd ssd-disk
+ 1642  cd lab/
+ 1643  ll
+ 1644  mkdir KokkosTutorials
+ 1645  mv kokkos-tutorials* KokkosTutorials/
+ 1646  ll
+ 1647  mv Kokkos-tests KokkosTutorials/
+ 1648  mv kokkos.wiki KokkosTutorials/
+ 1649  ll
+ 1650  cd KokkosTutorials/
+ 1651  ll
+ 1652  cd kokkos-tutorials
+ 1653  ll
+ 1654  cd LectureSeries/
+ 1655  ll
+ 1656  cd ../
+ 1657  ll
+ 1658  cd Exercises/
+ 1659  ll
+ 1660  vim Makefile 
+ 1661  cd simd_warp/
+ 1662  ll
+ 1663  cd Solution/
+ 1664  ll
+ 1665  vim Makefile 
+ 1666  ll
+ 1667  vim Makefile 
+ 1668  cd ../
+ 1669  ll
+ 1670  cd Solution/
+ 1671  ll
+ 1672  cd ../
+ 1673  ll
+ 1674  cd Solution/
+ 1675  ll
+ 1676  vim Makefile 
+ 1677  ls /opt/kokkos-dev073020/
+ 1678  vim Makefile 
+ 1679  pushd ./
+ 1680  cd ../../
+ 1681  cd ../
+ 1682  ll 
+ 1683  cd ../
+ 1684  ll
+ 1685  cd kokkos-tutorials-v0/
+ 1686  ll
+ 1687  cd Intro-Full/
+ 1688  ll
+ 1689  cd Exercises/
+ 1690  ll
+ 1691  cd 01/
+ 1692  ll
+ 1693  cd Begin/
+ 1694  ll
+ 1695  vim Makefile
+ 1696  pushd
+ 1697  vim Makefile
+ 1698  make
+ 1699  gcc --version
+ 1700  cd /home/alex/ssd-disk/workspace/DFL/build-defl-carevisit-v31-upd/runs
+ 1701  ll
+ 1702  vim current_run.sh 
+ 1703  sh current_run.sh 
+ 1704  cd ../
+ 1705  vim ../quda-defl-carevisit-v31-upd/lib/inv_eigcg_quda.cpp 
+ 1706  make -j4
+ 1707  cd runs/
+ 1708  sh current_run.sh 
+ 1709  vim ../../quda-defl-carevisit-v31-upd/lib/inv_eigcg_quda.cpp 
+ 1710  grep -Rn "quadrupleEigCGUpdate" ../../quda-defl-carevisit-v31-upd/
+ 1711  vim ../../quda-defl-carevisit-v31-upd/include/blas_quda.h
+ 1712  vim ../../quda-defl-carevisit-v31-upd/include/kernels/reduce_core.cuh
+ 1713  pwd
+ 1714  vim ../../quda-defl-carevisit-v31-upd/include/kernels/reduce_core.cuh
+ 1715  pushd ./
+ 1716  cd ../../quda-defl-carevisit-v31-upd/
+ 1717  git blame lib/reduce_quda.cuh
+ 1718  git blame include/kernels/reduce_quda.cuh
+ 1719  git blame include/kernels/reduce_core.cuh
+ 1720  git show 5128812f53
+ 1721  cd ../../
+ 1722  cd ../
+ 1723  ll
+ 1724  ls /opt/kokkos-cpu/
+ 1725  ll /opt/kokkos-cpu/
+ 1726  sudo rm -rf /opt/kokkos-cpu/
+ 1727  ll
+ 1728  cd 
+ 1729  cd ssd-disk
+ 1730  ll
+ 1731  cd soft/
+ 1732  ll
+ 1733  cd kokkos-space/
+ 1734  ll
+ 1735  cd kokkos
+ 1736  ll
+ 1737  cd build-cuda/
+ 1738  ll
+ 1739  make
+ 1740  make install
+ 1741  sudo make install
+ 1742  ls /opt/kokkos-dev073020/
+ 1743  ls /opt/kokkos-dev073020/bin/
+ 1744  ls /opt/kokkos-dev073020/lib/
+ 1745  ll
+ 1746  cd ../
+ 1747  ll
+ 1748  cd ../
+ 1749  ll
+ 1750  git clone https://github.com/kokkos/simd-math
+ 1751  ll
+ 1752  cd simd-math/
+ 1753  ll
+ 1754  cd ../
+ 1755  ll
+ 1756  cd simd-math/
+ 1757  ll
+ 1758  cd ../
+ 1759  sudo cp -r simd-math /opt/kokkos-dev073020/
+ 1760  ll
+ 1761  cd kokkos
+ 1762  ll
+ 1763  less Makefile.kokkos 
+ 1764  ln -sf ../simd-math .
+ 1765  ll
+ 1766  cd ../
+ 1767  ll
+ 1768  pwd
+ 1769  cd kokkos
+ 1770  ll
+ 1771  pwd
+ 1772  cd
+ 1773  cd ssd-disk
+ 1774  ll
+ 1775  cd workspace/DFL/
+ 1776  ll
+ 1777  cd CHECK/
+ 1778  ll
+ 1779  cd quda-cadefl-v30/
+ 1780  ll
+ 1781  cd build/
+ 1782  ll
+ 1783  cd runs/
+ 1784  ll
+ 1785  ./run_eigcg_l24t64_n1_noprof.sh 
+ 1786  ll
+ 1787  cd ../../
+ 1788  ll
+ 1789  cd ../
+ 1790  ll
+ 1791  cd build-defl-carevisit-v31-upd/
+ 1792  ll
+ 1793  cd runs/
+ 1794  ll
+ 1795  ./current_run.sh 
+ 1796  ll
+ 1797  pwd
+ 1798  cd ../../
+ 1799  ll
+ 1800  cd CHECK/
+ 1801  ll
+ 1802  cd quda-cadefl-v30/
+ 1803  ll
+ 1804  cd build/
+ 1805  ll
+ 1806  cd runs/
+ 1807  ll
+ 1808  vim run_eigcg_l24t64_n1_noprof.sh 
+ 1809  cp run_eigcg_l24t64_n1_noprof.sh  1.sh
+ 1810  cp run_eigcg_l24t64_n1_noprof.sh  run_eigcg_l24t64_n1_noprof_single_half.sh
+ 1811  ll
+ 1812  vim run_eigcg_l24t64_n1_noprof.sh 
+ 1813  sh run_eigcg_l24t64_n1_noprof.sh 
+ 1814  vim run_eigcg_l24t64_n1_noprof.sh 
+ 1815  sh run_eigcg_l24t64_n1_noprof.sh 
+ 1816  cd ../../
+ 1817  ll
+ 1818  cd quda-cadefl-v30/
+ 1819  vim lib/inv_eigcg_quda.cpp 
+ 1820  diff lib/inv_eigcg_quda.cpp ../../../quda-defl-carevisit-v31-upd/lib/inv_eigcg_quda.cpp 
+ 1821  gedit lib/inv_eigcg_quda.cpp 
+ 1822  cd ssd-disk
+ 1823  ll
+ 1824  cd lab/KokkosTutorials/
+ 1825  ll
+ 1826  cd kokkos-tutorials
+ 1827  ll
+ 1828  cd Exercises/
+ 1829  ll
+ 1830  cd 01/
+ 1831  ll
+ 1832  cd  Begin/
+ 1833  ll
+ 1834  gedit exercise_1_begin.cpp 
+ 1835  make
+ 1836  ll
+ 1837  ./01_Exercise.host 
+ 1838  make
+ 1839  ./01_Exercise.host 
+ 1840  ./01_Exercise.host --help
+ 1841  vim set_kenv.sh
+ 1842  source set_kenv.sh
+ 1843  ./01_Exercise.host
+ 1844  ./01_Exercise.host -help
+ 1845  ./01_Exercise.host -N 14 -M 10 -S 24
+ 1846  ./01_Exercise.host -N 12 -M 10 -S 22
+ 1847  ./01_Exercise.host -N 12 -M 12 -S 24
+ 1848  ./01_Exercise.host -N 13 -M 12 -S 25
+ 1849  ./01_Exercise.host -N 13 -M 13 -S 26
+ 1850  ./01_Exercise.host -N 13 -M 10 -S 26
+ 1851  ./01_Exercise.host -N 13 -M 10 -S 23
+ 1852  ./01_Exercise.host -N 14 -M 10 -S 23
+ 1853  ./01_Exercise.host -N 14 -M 10 -S 24
+ 1854  ./01_Exercise.host -N 18 -M 10 -S 28
+ 1855  ./01_Exercise.host -N 13 -M 13 -S 28
+ 1856  ./01_Exercise.host -N 13 -M 13 -S 26
+ 1857  vim set_kenv.sh 
+ 1858  source set_kenv.sh 
+ 1859  ./01_Exercise.host -N 13 -M 13 -S 26
+ 1860  vim set_kenv.sh 
+ 1861  ./01_Exercise.host -N 13 -M 13 -S 26
+ 1862  source set_kenv.sh 
+ 1863  ./01_Exercise.host -N 13 -M 13 -S 26
+ 1864  vim set_kenv.sh 
+ 1865  ./01_Exercise.host -N 13 -M 13 -S 26
+ 1866  source set_kenv.sh 
+ 1867  ./01_Exercise.host -N 13 -M 13 -S 26
+ 1868  vim set_kenv.sh 
+ 1869  source set_kenv.sh 
+ 1870  ./01_Exercise.host -N 13 -M 13 -S 26
+ 1871  vim set_kenv.sh 
+ 1872  ./01_Exercise.host -N 13 -M 13 -S 26
+ 1873  vim set_kenv.sh 
+ 1874  source set_kenv.sh 
+ 1875  ./01_Exercise.host -N 13 -M 13 -S 26
+ 1876  make
+ 1877  ll
+ 1878  mv exercise_1_begin.cpp exercise_1_begin.cpp.v1
+ 1879  ll
+ 1880  ll
+ 1881  make
+ 1882  ./01_Exercise.host -N 13 -M 13 -S 26
+ 1883  make KOKKOS_DEVICES=Cuda KOKKOS_ARCH=Turing75
+ 1884  cd
+ 1885  ls /opt/
+ 1886  julia
+ 1887  vim .bashrc
+ 1888  source .bashrc
+ 1889  julia
+ 1890  vim .bashrc
+ 1891  source .bashrc
+ 1892  julia
+ 1893  exit
+ 1894  julia
+ 1895  vim .bashrc
+ 1896  ll /opt/julia-1.5.0/bin
+ 1897  ll /opt/julia-1.5.0
+ 1898  ll /opt/julia-1.5.0/julia-1.5.0/
+ 1899  sudo mv /opt/julia-1.5.0/julia-1.5.0 /opt/julia-1.5.x
+ 1900  sudo mv /opt/julia-1.5.0 /opt/julia-1.5.x
+ 1901  ll /opt/
+ 1902  ll
+ 1903  cd /opt/julia-1.5.x/
+ 1904  ll
+ 1905  mv julia-1.5.0/ 1.5.0
+ 1906  ll
+ 1907  cd 1.5.0/
+ 1908  ll
+ 1909  vim .bashrc
+ 1910  vim ~/.bashrc
+ 1911  source ~/.bashrc
+ 1912  julia
+ 1913  vim ~/.bashrc
+ 1914  source ~/.bashrc
+ 1915  julia
+ 1916  ll
+ 1917  cd
+ 1918  cd ssd-disk/lab/
+ 1919  ll
+ 1920  cd julia-examples/
+ 1921  ll
+ 1922  git clone https://github.com/JuliaGPU/CUDA.jl
+ 1923  ll
+ 1924  cd CUDA.jl/
+ 1925  ll
+ 1926  cd examples/
+ 1927  ll
+ 1928  cd wmma/
+ 1929  kk
+ 1930  ll
+ 1931  julia high-level.jl 
+ 1932  ll
+ 1933  nvcc --version
+ 1934  sudo su
+ 1935  ll
+ 1936  julia high-level.jl 
+ 1937  ll
+ 1938  less low-level.jl 
+ 1939  cd ../
+ 1940  ll
+ 1941  julia hello_world.jl 
+ 1942  ll ~/.julia/artifacts/
+ 1943  ll ~/.julia/artifacts/17012fc3208ebe1ff8efaae8b0ee63df51a2af08/
+ 1944  ll ~/.julia/artifacts/17012fc3208ebe1ff8efaae8b0ee63df51a2af08/include/
+ 1945  ll /tmp/
+ 1946  ls -lh /tmp/
+ 1947  rm -rf /tmp/jl_*
+ 1948  ll
+ 1949  ll
+ 1950  vim high-level.jl 
+ 1951  ll
+ 1952  nvcc --version
+ 1953  vim ~/.bashrc
+ 1954  sudo su
+ 1955  htop
+ 1956  cd
+ 1957  cd ssd-disk
+ 1958  ll
+ 1959  cd workspace/
+ 1960  ll
+ 1961  cd DFL/
+ 1962  ll
+ 1963  cd quda-defl-carevisit-v31-upd/
+ 1964  git blame include/kernels/reduce_core.cuh
+ 1965  git show 5128812f53
+ 1966  grep -Rn "EigCG" ./
+ 1967  vim include/blas_quda.h 
+ 1968  grep -Rn "quadrupleEigCGUpdate" ./
+ 1969  git blame ./include/kernels/reduce_core.cuh
+ 1970  git show ea7437d6dc
+ 1971  vim include/kernels/reduce_core.cuh 
+ 1972  cd ../build-defl-carevisit-v31-upd/
+ 1973  make -j4
+ 1974  cd runs/
+ 1975  ll
+ 1976  ./current_run.sh 
+ 1977  vim current_run.sh 
+ 1978  ./current_run.sh 
+ 1979  vim current_run.sh 
+ 1980  sh current_run.sh 
+ 1981  vim current_run.sh 
+ 1982  sh current_run.sh 
+ 1983  vim current_run.sh 
+ 1984  sh current_run.sh 
+ 1985  nvidia-smi -l 1
+ 1986  ll
+ 1987  vim current_run.sh 
+ 1988  sh current_run.sh 
+ 1989  vim ../../quda-defl-carevisit-v31-upd/lib/inv_eigcg_quda.cpp 
+ 1990  cmake --build .. --target invert_test
+ 1991  sh current_run.sh 
+ 1992  ll
+ 1993  cd wwm
+ 1994  cd wmma/
+ 1995  julia high-level.jl 
+ 1996  ll
+ 1997  ppt reset
+ 1998  ptt reset
+ 1999  history
+ 2000  julia  high-level.jl 
+ 2001  julia  high-level.jl &
+ 2002  nvidia-smi -l 1
+ 2003  ll
+ 2004  julia low-level.jl 
+ 2005  vim low-level.jl 
+ 2006  julia low-level.jl 
+ 2007  vim low-level.jl 
+ 2008  julia low-level.jl 
+ 2009  vim low-level.jl 
+ 2010  julia low-level.jl 
+ 2011  vim high-level.jl 
+ 2012  cd ../
+ 2013  cd 
+ 2014  cd ssd-disk
+ 2015  ll
+ 2016  cd lab/TC/
+ 2017  ll
+ 2018  mv quda.tgz quda 
+ 2019  tar -czf quda.tgz quda 
+ 2020  ll
+ 2021  mv quda.tgz quda-frozen-v2.tgz 
+ 2022  ll
+ 2023  rm -rf quda
+ 2024  qclone
+ 2025  ll
+ 2026  sudo apt-get update
+ 2027  sudo apt-get upgrade
+ 2028  ll
+ 2029  cd quda/
+ 2030  git checkout feature/mg-mma 
+ 2031  git log
+ 2032  ll
+ 2033  cd include/
+ 2034  ll
+ 2035  cd mma_tensor_op/
+ 2036  ll
+ 2037  less gemm.cuh 
+ 2038  cd ../
+ 2039  ll
+ 2040  cp -r mma_tensor_op ../../mma_tensor_op_test6
+ 2041  cd ../../
+ 2042  ll
+ 2043  tar -czf quda.tgz quda
+ 2044  ll
+ 2045  mv quda.tgz quda-frozen-v3.tgz
+ 2046  ll
+ 2047  cd mma_tensor_op_test6/
+ 2048  ll
+ 2049  vim hmma_m16n
+ 2050  vim gemm.cuh 
+ 2051  nvcc --help
+ 2052  ll
+ 2053  cp gemm.cuh gemm.cu
+ 2054  vim gemm.cu
+ 2055  nvcc -std=c++14 -arch=sm_75 --ptx gemm.cu -o a.ptx
+ 2056  cp ../quda/include/enum_quda.h 
+ 2057  cp ../quda/include/enum_quda.h .
+ 2058  vim enum_quda.h 
+ 2059  vim gemm.cu
+ 2060  vim enum_quda.h 
+ 2061  vim gemm.cu
+ 2062  vim enum_quda.h 
+ 2063  vim gemm.cu
+ 2064  vim enum_quda.h 
+ 2065  vim gemm.cu
+ 2066  nvcc -std=c++14 -arch=sm_75 --ptx gemm.cu -o a.ptx
+ 2067  vim gemm.cu
+ 2068  nvcc -I.  -std=c++14 -arch=sm_75 --ptx gemm.cu -o a.ptx
+ 2069  vim gemm.cu
+ 2070  nvcc -I.  -std=c++14 -arch=sm_75 --ptx gemm.cu -o a.ptx
+ 2071  ll
+ 2072  less a.ptx 
+ 2073  nvcc -I.  -std=c++14 -arch=sm_75 --ptx gemm.cu
+ 2074  ll
+ 2075  less gemm.ptx 
+ 2076  less hmma_m16n8k8_sm80.cuh 
+ 2077  history > h.1

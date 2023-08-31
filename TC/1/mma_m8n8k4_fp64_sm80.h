@@ -63,7 +63,7 @@ class WarpRegisterMapping {
 
     WarpRegisterMapping(int threadId) :
       laneId(threadId & 31),
-      groupId(laneId >> 2),         // = laneId / 4 
+      groupId(laneId >> 2),         // = laneId / 4
       threadId_in_group(laneId & 3) // = laneId % 4
     {
     }
@@ -85,7 +85,7 @@ struct MmaOperandA {
   { // Assuming col major smem layout
     constexpr  int INST_M = INST[0]; //8
     
-    const int k = tile_k * MMA_K + wrm.threadId_in_group;//{0,1,2,3}, MMA_K = 4
+    const int k = tile_k * MMA_K + wrm.threadId_in_group;//
 #pragma unroll
     for (int i = 0; i < WARP_M / 2; i++) {
 #pragma unroll

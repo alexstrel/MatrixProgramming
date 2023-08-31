@@ -1,7 +1,7 @@
 
 NVCPP=nvc++
 
-GCC_HOME=/home/astrel/install/spack-0.19.1/opt/spack/linux-scientific7-haswell/gcc-4.8.5/gcc-12.2.0-alrdcqhufql6zdnkw2ave2fdgpxadhy6
+GCC_HOME=/opt/spack-0.19.0/opt/spack/linux-ubuntu22.04-haswell/gcc-12.1.0/gcc-12.2.0-ogs53w6jn6kghfvjoaeqa3jmblrgrsne
 
 all: dmma_test.exe
 
