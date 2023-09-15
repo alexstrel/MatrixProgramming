@@ -35,9 +35,9 @@
 
 #include <mma_m8n8k4_fp64_sm80.h>
 
-#define MATRIX_M 4096
+#define MATRIX_M 2048
 #define MATRIX_N 2048 // 192 * 64
-#define MATRIX_K 1024
+#define MATRIX_K 2048
 
 #include <cuda_pipeline.h>
 
@@ -92,6 +92,8 @@ void mma_cuda_kernel(const int thread_id, MDViewTp auto view_a, MDViewTp auto vi
   using SmemMapMK = stdex::layout_stride::mapping<stdex::extents<int, bM, bK>>;
   using SmemMapKN = stdex::layout_stride::mapping<stdex::extents<int, bK, bN>>;
  
+  using mma_opa = MmaOperandAB<double, WARP_M, MMA_M, MMA_K, INST[0], 0>;
+  using mma_opb = MmaOperandAB<double, WARP_N, MMA_N, MMA_K, INST[1], 1>;
 
   constexpr int tile_row_dim = bM / MMA_M; // number of tiles in the row dimension: 64 / (8*4)
   constexpr int tile_col_dim = bN / MMA_N; // number of tiles in the col dimension: 64 / (8*4)
@@ -104,7 +106,7 @@ void mma_cuda_kernel(const int thread_id, MDViewTp auto view_a, MDViewTp auto vi
 
   static_assert(total_tile % total_warp == 0, "Total number of tiles should be divisible by the number of warps.");
 
-  MmaOperandC op_c[warp_cycle]; // initilized to zero
+  MmaOperandC<double, WARP_M, WARP_N, INST[0], INST[1]> op_c[warp_cycle]; // initilized to zero
 
   const int warp_id   = thread_id / 32;
   
@@ -158,11 +160,11 @@ void mma_cuda_kernel(const int thread_id, MDViewTp auto view_a, MDViewTp auto vi
 
       for (int tile_k = 0; tile_k < tile_acc_dim; tile_k++) {//(bK / MMA_K)
 
-        MmaOperandA op_a;
-        op_a.load(view_smem_a_compute, tile_k, tile_m, wrm);
+        auto op_a = mma_opa(view_smem_a_compute, tile_k, tile_m, wrm);
+        //
+        auto op_b = mma_opb(view_smem_b_compute, tile_k, tile_n, wrm);
 
-        MmaOperandB op_b;
-        op_b.load(view_smem_b_compute, tile_k, tile_n, wrm);
+        m8n8k4_instruction_f64 mma;
 
         mma(op_c[c], op_a, op_b);
 
@@ -304,11 +306,14 @@ int main(int argc, char *argv[])
   printf("Shared memory size = %05d\n", shared_memory_size);
 
   int nstreams = 1;
-  int niter    = 1;
+  int niter    = 100;
 
   auto streams = get_streams(nstreams);
 
   auto stream  = streams[0];//with UVM, we use only one compute stream 
+
+  //warmup:
+  dispatch_mma_kernel<F, block_y, block_z, decltype(stream), bM, bN, bK>(mma_kernel, shared_memory_size, stream);
 
   cudaErrCheck(cudaEventRecord(start_mma));
 
@@ -322,6 +327,11 @@ int main(int argc, char *argv[])
 
   // Now using cuBLAS
   printf("Running with cuBLAS...\n");
+  //warmup:
+  //cublasErrCheck(cublasGemmEx(cublas_handle, CUBLAS_OP_N, CUBLAS_OP_N, MATRIX_M, MATRIX_N, MATRIX_K, &alpha, a_fp64.data(),
+  //                              CUDA_R_64F, MATRIX_M, b_fp64.data(), CUDA_R_64F, MATRIX_K, &beta, c_cublas.data(), CUDA_R_64F,
+  //                              MATRIX_M, CUDA_R_64F, CUBLAS_GEMM_DFALT_TENSOR_OP));
+
   cudaErrCheck(cudaEventRecord(start_cublas));
 
   for (int i = 0; i < niter; i++) {

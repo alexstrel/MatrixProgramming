@@ -53,6 +53,10 @@ class is_mdspan<stdex::mdspan<T, Extents, LayoutPolicy, AccessorPolicy>> : publi
 template <typename T>
 concept MDViewTp = is_mdspan<std::remove_cvref_t<T>>::value;
 
+// Extended floaitng point type:
+template <typename T>
+concept ArithmeticTp = std::is_floating_point_v<T>;
+
 class WarpRegisterMapping {
   
   public:
@@ -70,53 +74,56 @@ class WarpRegisterMapping {
 };
 
 /*
- * For MmaOperandA and MmaOperandB data needs to be loaded from shared memory to the registers of the threads in a warp
+ * For MmaOperand  ( A and B matrices) data needs to be loaded from shared memory to the registers of the threads in a warp
  * according to how the matrix elements are distributed accross the threads in the (D)MMA instruciton.
  * The specific distribution is documented in
  *   https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#warp-level-matrix-fragment-mma-884-f64
  */
-struct MmaOperandA {
+template<ArithmeticTp Float, int warp_tile_, int mma_ld, int mma_k, int inst_length, int order = 0>
+class MmaOperandAB {
+  public:
+    using reg_type = Float;
 
-  using reg_type = double;
+    static constexpr int warp_tile   = warp_tile_;
   
-  reg_type reg[WARP_M];
+    std::array<reg_type, warp_tile> reg;
 
-  inline void load(const MDViewTp auto smem, const int tile_k, const int tile_m, const WarpRegisterMapping &wrm)
-  { // Assuming col major smem layout
-    constexpr  int INST_M = INST[0]; //8
+    inline MmaOperandAB( const MDViewTp auto smem, const int tile_k, const int tile_ld, const WarpRegisterMapping &wrm ){
+      constexpr  int inst_ld = inst_length;//INST[0,1]; //8
+
+      const int k = tile_k * mma_k + wrm.threadId_in_group;//{0,1,2,3}, MMA_K = 4
+#pragma unroll
+      for (int i = 0; i < warp_tile / 2; i++) {
+#pragma unroll
+        for (int b = 0; b < 2; b++) {
+          int l = tile_ld * mma_ld + (i * inst_ld + wrm.groupId) * 2 + b;
+          if constexpr (order == 0) {
+            reg[i * 2 + b] = smem(l, k);  //[k * lda + l];
+          } else {
+            reg[i * 2 + b] = smem(k, l);  //[k * ldb + l];
+          }
+        }
+      }
+    }
+
+    inline void load(const MDViewTp auto smem, const int tile_k, const int tile_ld, const WarpRegisterMapping &wrm)
+    { // Assuming col major smem layout
+      constexpr  int inst_ld = inst_length;//INST[0,1]; //8
     
-    const int k = tile_k * MMA_K + wrm.threadId_in_group;//{0,1,2,3}, MMA_K = 4
+      const int k = tile_k * mma_k + wrm.threadId_in_group;//{0,1,2,3}, MMA_K = 4
 #pragma unroll
-    for (int i = 0; i < WARP_M / 2; i++) {
+      for (int i = 0; i < warp_tile / 2; i++) {
 #pragma unroll
-      for (int b = 0; b < 2; b++) {
-        int m = tile_m * MMA_M + (i * INST_M + wrm.groupId) * 2 + b;
-        reg[i * 2 + b] = smem(m, k);  //[k * lda + m];
+        for (int b = 0; b < 2; b++) {
+          int l = tile_ld * mma_ld + (i * inst_ld + wrm.groupId) * 2 + b;
+          if constexpr (order == 0) {
+            reg[i * 2 + b] = smem(l, k);  //[k * lda + l];
+          } else {
+            reg[i * 2 + b] = smem(k, l);  //[k * ldb + l];
+          }
+        }
       }
     }
-  }
-};
-
-struct MmaOperandB {
-
-  using reg_type = double;
-  reg_type reg[WARP_N];
-
-  inline void load(const MDViewTp auto smem, const int tile_k, const int tile_n, const WarpRegisterMapping &wrm)
-  { // Assuming col major smem layout
-    constexpr  int INST_N = INST[1]; //8  
-
-    const int k = tile_k * MMA_K + wrm.threadId_in_group;
-
-#pragma unroll
-    for (int i = 0; i < WARP_N / 2; i++) {
-#pragma unroll
-      for (int b = 0; b < 2; b++) {
-        int n = tile_n * MMA_N + (i * INST_N + wrm.groupId) * 2 + b;
-        reg[i * 2 + b] = smem(k, n);  //[k * ldb + n];
-      }
-    }
-  }
 };
 
 /*
@@ -125,27 +132,33 @@ struct MmaOperandB {
  * The specific distribution is documented in
  *   https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#warp-level-matrix-fragment-mma-884-f64
  */
+template<ArithmeticTp Float, int warp_m_, int warp_n_, int inst_m_, int inst_n_ >
 struct MmaOperandC {
 
-  using reg_type = double;
-  reg_type reg[WARP_M * WARP_N * 2];
+  public:
+    using reg_type = Float;
 
-  MmaOperandC() {
+    static constexpr int warp_m   = warp_m_;
+    static constexpr int warp_n   = warp_n_;
+
+    std::array<reg_type, warp_m * warp_n * 2> reg;
+
+    MmaOperandC() {
 #pragma unroll
-    for (int i = 0; i < WARP_M * WARP_N * 2; i++) { reg[i] = 0; }
-  }
+      for (int i = 0; i < warp_m * warp_n * 2; i++) { reg[i] = 0; }
+    }
 
-  void store(MDViewTp auto c_view, int m_offset, int n_offset, const WarpRegisterMapping &wrm)
-  {
-    constexpr  int INST_N = INST[1]; //8  
-    constexpr  int INST_M = INST[0]; //8      
+    void store(MDViewTp auto c_view, int m_offset, int n_offset, const WarpRegisterMapping &wrm)
+    {
+      constexpr  int inst_n = inst_n_; //INST[1]; //8  
+      constexpr  int inst_m = inst_m_; //INST[0]; //8      
     
 #pragma unroll
     for (int c = 0; c < 2; c++) {
 #pragma unroll
-      for (int n_i = 0; n_i < WARP_N / 2; n_i++) {
+      for (int n_i = 0; n_i < warp_n / 2; n_i++) {
 #pragma unroll
-        for (int m_i = 0; m_i < WARP_M / 2; m_i++) {
+        for (int m_i = 0; m_i < warp_m / 2; m_i++) {
 #pragma unroll
           for (int n_b = 0; n_b < 2; n_b++) {
             double tmp[2];
@@ -153,14 +166,14 @@ struct MmaOperandC {
             for (int m_b = 0; m_b < 2; m_b++) {
               int n_iter = n_i * 2 + n_b;
               int m_iter = m_i * 2 + m_b;
-              int c_iter = (n_iter * WARP_M + m_iter) * 2;
+              int c_iter = (n_iter * warp_m + m_iter) * 2;
 
               tmp[m_b] = reg[c_iter + c];
             }
             //int gmem_m = m_offset + (m_i * 8 + wrm.groupId) * 2;
             //int gmem_n = n_offset + ((n_i * 4 + wrm.threadId_in_group) * 2 + c) * 2 + n_b;
-            int gmem_m = m_offset + (m_i * INST_M + wrm.groupId) * 2;
-            int gmem_n = n_offset + ((n_i * INST_N + wrm.threadId_in_group * 2) + c) * 2 + n_b;            
+            int gmem_m = m_offset + (m_i * inst_m + wrm.groupId) * 2;
+            int gmem_n = n_offset + ((n_i * inst_n + wrm.threadId_in_group * 2) + c) * 2 + n_b;            
             asm("st.cs.global.v2.f64 [%0+0], {%1, %2};" ::"l"(&c_view(gmem_m,  gmem_n)), "d"(tmp[0]), "d"(tmp[1]));
           }
         }
@@ -173,20 +186,35 @@ struct MmaOperandC {
  * Actually calling the (D)MMA instruction. 
  * (WARNING: without target branching should be inlined for CUDA kernel only) 
  */
-void mma(MmaOperandC &op_c, const MmaOperandA &op_a, const MmaOperandB &op_b)
-{
-  if target (nv::target::is_device) {
+template <ArithmeticTp res_type, ArithmeticTp op_type, int inst_m, int inst_n, int inst_k> 
+class mma_instruction{ };
+
+
+template <> class mma_instruction<double, double, 8, 8, 4>{ 
+  public:
+
+    template <typename mma_op_c, typename mma_op_a, typename mma_op_b>
+    void operator()(mma_op_c &op_c, const mma_op_a &op_a, const mma_op_b &op_b) {
+
+      constexpr int warp_m = mma_op_c::warp_m;
+      constexpr int warp_n = mma_op_c::warp_n;
+
+      if target (nv::target::is_device) {
 #pragma unroll
-    for (int m_iter = 0; m_iter < WARP_M; m_iter++) {
+        for (int m_iter = 0; m_iter < warp_m; m_iter++) {
 #pragma unroll
-      for (int n_iter = 0; n_iter < WARP_N; n_iter++) {
-        int c_iter = (n_iter * WARP_M + m_iter) * 2;
-        asm volatile("mma.sync.aligned.m8n8k4.row.col.f64.f64.f64.f64 {%0,%1}, {%2}, {%3}, {%0,%1};"
+          for (int n_iter = 0; n_iter < warp_n; n_iter++) {
+            int c_iter = (n_iter * warp_m + m_iter) * 2;
+            asm volatile("mma.sync.aligned.m8n8k4.row.col.f64.f64.f64.f64 {%0,%1}, {%2}, {%3}, {%0,%1};"
                      : "+d"(op_c.reg[c_iter + 0]), "+d"(op_c.reg[c_iter + 1])
                      : "d"(op_a.reg[m_iter]), "d"(op_b.reg[n_iter]));
+          }
+        }
+      } else {
+        std::cerr << "Operation is not implemented (not supported)\n" << std::endl;
       }
     }
-  } else {
-    std::cerr << "Operation is not implemented (not supported)\n" << std::endl;
-  }
-}
+};
+
+using m8n8k4_instruction_f64 = mma_instruction<double, double, 8, 8, 4>;
+
