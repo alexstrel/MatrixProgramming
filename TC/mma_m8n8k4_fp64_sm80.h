@@ -57,6 +57,11 @@ concept MDViewTp = is_mdspan<std::remove_cvref_t<T>>::value;
 template <typename T>
 concept ArithmeticTp = std::is_floating_point_v<T>;
 
+enum class OperandType {
+	Aoperand = 0,
+	Boperand = 1
+};
+
 class WarpRegisterMapping {
   
   public:
@@ -79,7 +84,7 @@ class WarpRegisterMapping {
  * The specific distribution is documented in
  *   https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#warp-level-matrix-fragment-mma-884-f64
  */
-template<ArithmeticTp Float, int warp_tile_, int mma_ld, int mma_k, int inst_length, int order = 0>
+template<ArithmeticTp Float, int warp_tile_, int mma_ldim, int mma_k, int inst_length, OperandType type = OperandType::Aoperand>
 class MmaOperandAB {
   public:
     using reg_type = Float;
@@ -88,37 +93,18 @@ class MmaOperandAB {
   
     std::array<reg_type, warp_tile> reg;
 
-    inline MmaOperandAB( const MDViewTp auto smem, const int tile_k, const int tile_ld, const WarpRegisterMapping &wrm ){
-      constexpr  int inst_ld = inst_length;//INST[0,1]; //8
+    inline MmaOperandAB( const MDViewTp auto smem, const int tile_k, const int tile_ldim, const WarpRegisterMapping &wrm ){
+      constexpr  int inst_ldim = inst_length;//INST[0,1]; //8
 
       const int k = tile_k * mma_k + wrm.threadId_in_group;//{0,1,2,3}, MMA_K = 4
 #pragma unroll
       for (int i = 0; i < warp_tile / 2; i++) {
 #pragma unroll
         for (int b = 0; b < 2; b++) {
-          int l = tile_ld * mma_ld + (i * inst_ld + wrm.groupId) * 2 + b;
-          if constexpr (order == 0) {
+          int l = tile_ldim * mma_ldim + (i * inst_ldim + wrm.groupId) * 2 + b;
+          if constexpr (type == OperandType::Aoperand) {//A operand
             reg[i * 2 + b] = smem(l, k);  //[k * lda + l];
-          } else {
-            reg[i * 2 + b] = smem(k, l);  //[k * ldb + l];
-          }
-        }
-      }
-    }
-
-    inline void load(const MDViewTp auto smem, const int tile_k, const int tile_ld, const WarpRegisterMapping &wrm)
-    { // Assuming col major smem layout
-      constexpr  int inst_ld = inst_length;//INST[0,1]; //8
-    
-      const int k = tile_k * mma_k + wrm.threadId_in_group;//{0,1,2,3}, MMA_K = 4
-#pragma unroll
-      for (int i = 0; i < warp_tile / 2; i++) {
-#pragma unroll
-        for (int b = 0; b < 2; b++) {
-          int l = tile_ld * mma_ld + (i * inst_ld + wrm.groupId) * 2 + b;
-          if constexpr (order == 0) {
-            reg[i * 2 + b] = smem(l, k);  //[k * lda + l];
-          } else {
+          } else {//B operand
             reg[i * 2 + b] = smem(k, l);  //[k * ldb + l];
           }
         }
