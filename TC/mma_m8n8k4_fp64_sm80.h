@@ -57,6 +57,8 @@ concept MDViewTp = is_mdspan<std::remove_cvref_t<T>>::value;
 template <typename T>
 concept ArithmeticTp = std::is_floating_point_v<T>;
 
+constexpr int warp_size = 32;
+
 enum class OperandType {
 	Aoperand = 0,
 	Boperand = 1
@@ -65,15 +67,17 @@ enum class OperandType {
 class WarpRegisterMapping {
   
   public:
-  
+    static constexpr int group_size = 4;
+    static constexpr int ngroups    = warp_size / group_size; 
+ 
     int laneId;
     int groupId;
     int threadId_in_group;
 
     WarpRegisterMapping(int threadId) :
       laneId(threadId & 31),
-      groupId(laneId >> 2),         // = laneId / 4 
-      threadId_in_group(laneId & 3) // = laneId % 4
+      groupId(laneId >> 2),         // = laneId / 4 (group_size)
+      threadId_in_group(laneId & 3) // = laneId % 4 (group_size) 
     {
     }
 };
@@ -84,7 +88,7 @@ class WarpRegisterMapping {
  * The specific distribution is documented in
  *   https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#warp-level-matrix-fragment-mma-884-f64
  */
-template<ArithmeticTp Float, int warp_tile_, int mma_ldim, int mma_k, int inst_length, OperandType type = OperandType::Aoperand>
+template<ArithmeticTp Float, int warp_tile_, int mma_ldim, int mma_k, OperandType type = OperandType::Aoperand>
 class MmaOperandAB {
   public:
     using reg_type = Float;
@@ -94,14 +98,14 @@ class MmaOperandAB {
     std::array<reg_type, warp_tile> reg;
 
     inline MmaOperandAB( const MDViewTp auto smem, const int tile_k, const int tile_ldim, const WarpRegisterMapping &wrm ){
-      constexpr  int inst_ldim = inst_length;//INST[0,1]; //8
+      constexpr  int ngroups   = std::remove_cvref_t<decltype(wrm)>::ngroups;
 
       const int k = tile_k * mma_k + wrm.threadId_in_group;//{0,1,2,3}, MMA_K = 4
 #pragma unroll
       for (int i = 0; i < warp_tile / 2; i++) {
 #pragma unroll
         for (int b = 0; b < 2; b++) {
-          int l = tile_ldim * mma_ldim + (i * inst_ldim + wrm.groupId) * 2 + b;
+          int l = tile_ldim * mma_ldim + (i * ngroups + wrm.groupId) * 2 + b;
           if constexpr (type == OperandType::Aoperand) {//A operand
             reg[i * 2 + b] = smem(l, k);  //[k * lda + l];
           } else {//B operand
@@ -118,7 +122,7 @@ class MmaOperandAB {
  * The specific distribution is documented in
  *   https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#warp-level-matrix-fragment-mma-884-f64
  */
-template<ArithmeticTp Float, int warp_m_, int warp_n_, int inst_m_, int inst_n_ >
+template<ArithmeticTp Float, int warp_m_, int warp_n_>
 struct MmaOperandC {
 
   public:
@@ -136,9 +140,9 @@ struct MmaOperandC {
 
     void store(MDViewTp auto c_view, int m_offset, int n_offset, const WarpRegisterMapping &wrm)
     {
-      constexpr  int inst_n = inst_n_; //INST[1]; //8  
-      constexpr  int inst_m = inst_m_; //INST[0]; //8      
-    
+      constexpr  int ngroups    = std::remove_cvref_t<decltype(wrm)>::ngroups;
+      constexpr  int group_size = std::remove_cvref_t<decltype(wrm)>::group_size;    
+
 #pragma unroll
     for (int c = 0; c < 2; c++) {
 #pragma unroll
@@ -148,18 +152,16 @@ struct MmaOperandC {
 #pragma unroll
           for (int n_b = 0; n_b < 2; n_b++) {
             double tmp[2];
+            int n_iter = n_i * 2 + n_b;
 #pragma unroll
             for (int m_b = 0; m_b < 2; m_b++) {
-              int n_iter = n_i * 2 + n_b;
               int m_iter = m_i * 2 + m_b;
               int c_iter = (n_iter * warp_m + m_iter) * 2;
 
               tmp[m_b] = reg[c_iter + c];
             }
-            //int gmem_m = m_offset + (m_i * 8 + wrm.groupId) * 2;
-            //int gmem_n = n_offset + ((n_i * 4 + wrm.threadId_in_group) * 2 + c) * 2 + n_b;
-            int gmem_m = m_offset + (m_i * inst_m + wrm.groupId) * 2;
-            int gmem_n = n_offset + ((n_i * inst_n + wrm.threadId_in_group * 2) + c) * 2 + n_b;            
+            int gmem_m = m_offset + (m_i * ngroups + wrm.groupId) * 2;
+            int gmem_n = n_offset + ((n_i * group_size + wrm.threadId_in_group)*2 + c) * 2 + n_b;            
             asm("st.cs.global.v2.f64 [%0+0], {%1, %2};" ::"l"(&c_view(gmem_m,  gmem_n)), "d"(tmp[0]), "d"(tmp[1]));
           }
         }

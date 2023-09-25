@@ -92,8 +92,8 @@ void mma_cuda_kernel(const int thread_id, MDViewTp auto view_a, MDViewTp auto vi
   using SmemMapMK = stdex::layout_stride::mapping<stdex::extents<int, bM, bK>>;
   using SmemMapKN = stdex::layout_stride::mapping<stdex::extents<int, bK, bN>>;
  
-  using mma_opa = MmaOperandAB<double, WARP_M, MMA_M, MMA_K, INST[0], OperandType::Aoperand>;
-  using mma_opb = MmaOperandAB<double, WARP_N, MMA_N, MMA_K, INST[1], OperandType::Boperand>;
+  using mma_opa = MmaOperandAB<double, WARP_M, MMA_M, MMA_K, OperandType::Aoperand>;
+  using mma_opb = MmaOperandAB<double, WARP_N, MMA_N, MMA_K, OperandType::Boperand>;
 
   constexpr int tile_row_dim = bM / MMA_M; // number of tiles in the row dimension: 64 / (8*4)
   constexpr int tile_col_dim = bN / MMA_N; // number of tiles in the col dimension: 64 / (8*4)
@@ -106,7 +106,7 @@ void mma_cuda_kernel(const int thread_id, MDViewTp auto view_a, MDViewTp auto vi
 
   static_assert(total_tile % total_warp == 0, "Total number of tiles should be divisible by the number of warps.");
 
-  MmaOperandC<double, WARP_M, WARP_N, INST[0], INST[1]> op_c[warp_cycle]; // initilized to zero
+  MmaOperandC<double, WARP_M, WARP_N> op_c[warp_cycle]; // initilized to zero
 
   const int warp_id   = thread_id / 32;
   
