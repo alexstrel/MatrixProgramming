@@ -57,7 +57,8 @@ concept MDViewTp = is_mdspan<std::remove_cvref_t<T>>::value;
 template <typename T>
 concept ArithmeticTp = std::is_floating_point_v<T>;
 
-constexpr int warp_size = 32;
+constexpr int warp_size     = 32;
+constexpr int elems_per_reg = 2;
 
 enum class OperandType {
 	Aoperand = 0,
@@ -98,18 +99,20 @@ class MmaOperandAB {
     std::array<reg_type, warp_tile> reg;
 
     inline MmaOperandAB( const MDViewTp auto smem, const int tile_k, const int tile_ldim, const WarpRegisterMapping &wrm ){
-      constexpr  int ngroups   = std::remove_cvref_t<decltype(wrm)>::ngroups;
+      constexpr int ngroups   = std::remove_cvref_t<decltype(wrm)>::ngroups;
+    
+      constexpr int nelems = (type == OperandType::Aoperand) ? elems_per_reg : 1;  
 
       const int k = tile_k * mma_k + wrm.threadId_in_group;//{0,1,2,3}, MMA_K = 4
 #pragma unroll
-      for (int i = 0; i < warp_tile / 2; i++) {
+      for (int i = 0; i < warp_tile / nelems; i++) {
 #pragma unroll
-        for (int b = 0; b < 2; b++) {
-          int l = tile_ldim * mma_ldim + (i * ngroups + wrm.groupId) * 2 + b;
+        for (int b = 0; b < nelems; b++) {
+          int l = tile_ldim * mma_ldim + (i * ngroups + wrm.groupId) * nelems + b;
           if constexpr (type == OperandType::Aoperand) {//A operand
-            reg[i * 2 + b] = smem(l, k);  //[k * lda + l];
+            reg[i * nelems + b] = smem(l, k);  //[k * lda + l];
           } else {//B operand
-            reg[i * 2 + b] = smem(k, l);  //[k * ldb + l];
+            reg[i * nelems + b] = smem(k, l);  //[k * ldb + l];
           }
         }
       }
@@ -131,39 +134,36 @@ struct MmaOperandC {
     static constexpr int warp_m   = warp_m_;
     static constexpr int warp_n   = warp_n_;
 
-    std::array<reg_type, warp_m * warp_n * 2> reg;
+    std::array<reg_type, warp_m * warp_n * elems_per_reg> reg;
 
     MmaOperandC() {
 #pragma unroll
-      for (int i = 0; i < warp_m * warp_n * 2; i++) { reg[i] = 0; }
+      for (int i = 0; i < warp_m * warp_n * elems_per_reg; i++) { reg[i] = 0; }
     }
 
-    void store(MDViewTp auto c_view, int m_offset, int n_offset, const WarpRegisterMapping &wrm)
-    {
+    void store(MDViewTp auto c_view, int m_offset, int n_offset, const WarpRegisterMapping &wrm) {
       constexpr  int ngroups    = std::remove_cvref_t<decltype(wrm)>::ngroups;
       constexpr  int group_size = std::remove_cvref_t<decltype(wrm)>::group_size;    
 
-#pragma unroll
-    for (int c = 0; c < 2; c++) {
-#pragma unroll
-      for (int n_i = 0; n_i < warp_n / 2; n_i++) {
-#pragma unroll
-        for (int m_i = 0; m_i < warp_m / 2; m_i++) {
-#pragma unroll
-          for (int n_b = 0; n_b < 2; n_b++) {
-            double tmp[2];
-            int n_iter = n_i * 2 + n_b;
-#pragma unroll
-            for (int m_b = 0; m_b < 2; m_b++) {
-              int m_iter = m_i * 2 + m_b;
-              int c_iter = (n_iter * warp_m + m_iter) * 2;
+      static_assert(elems_per_reg == 2, "Elements per register must be 2 for st.cs.global.v2.f64 instruction.");
 
-              tmp[m_b] = reg[c_iter + c];
-            }
-            int gmem_m = m_offset + (m_i * ngroups + wrm.groupId) * 2;
-            int gmem_n = n_offset + ((n_i * group_size + wrm.threadId_in_group)*2 + c) * 2 + n_b;            
-            asm("st.cs.global.v2.f64 [%0+0], {%1, %2};" ::"l"(&c_view(gmem_m,  gmem_n)), "d"(tmp[0]), "d"(tmp[1]));
+#pragma unroll
+    for (int n_iter = 0; n_iter < warp_n; n_iter++) {
+#pragma unroll
+      for (int c = 0; c < elems_per_reg; c++) {
+#pragma unroll
+        for (int m_i = 0; m_i < warp_m / elems_per_reg; m_i++) {
+          double tmp[elems_per_reg];
+#pragma unroll
+          for (int m_b = 0; m_b < elems_per_reg; m_b++) {
+            int m_iter = m_i * elems_per_reg + m_b;
+            int c_iter = (n_iter * warp_m + m_iter) * elems_per_reg;
+
+            tmp[m_b] = reg[c_iter + c];
           }
+          int gmem_m = m_offset + (m_i * ngroups + wrm.groupId) * elems_per_reg;
+          int gmem_n = n_offset + (n_iter * group_size + wrm.threadId_in_group) * elems_per_reg + c;            
+          asm("st.cs.global.v2.f64 [%0+0], {%1, %2};" ::"l"(&c_view(gmem_m,  gmem_n)), "d"(tmp[0]), "d"(tmp[1]));
         }
       }
     }
@@ -188,11 +188,12 @@ template <> class mma_instruction<double, double, 8, 8, 4>{
       constexpr int warp_n = mma_op_c::warp_n;
 
       if target (nv::target::is_device) {
+        static_assert(elems_per_reg == 2, "Elements per register must be 2 for mma.sync.aligned.m8n8k4.row.col.f64.f64.f64.f64 instruction.");
 #pragma unroll
         for (int m_iter = 0; m_iter < warp_m; m_iter++) {
 #pragma unroll
           for (int n_iter = 0; n_iter < warp_n; n_iter++) {
-            int c_iter = (n_iter * warp_m + m_iter) * 2;
+            int c_iter = (n_iter * warp_m + m_iter) * elems_per_reg;
             asm volatile("mma.sync.aligned.m8n8k4.row.col.f64.f64.f64.f64 {%0,%1}, {%2}, {%3}, {%0,%1};"
                      : "+d"(op_c.reg[c_iter + 0]), "+d"(op_c.reg[c_iter + 1])
                      : "d"(op_a.reg[m_iter]), "d"(op_b.reg[n_iter]));
